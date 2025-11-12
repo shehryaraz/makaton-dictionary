@@ -1,0 +1,247 @@
+[
+  {
+    "phrase": "Hello",
+    "imageUrl": "https://www.riverbankspecialsch.co.uk/_site/data/files/images/makaton/8D3E33FBDC687DCB9E6B0FED52E0532E.png",
+    "category": "Greetings"
+  },
+  {
+    "phrase": "Goodbye",
+    "imageUrl": "https://www.riverbankspecialsch.co.uk/_site/data/files/images/makaton/FFD0999063C6861184542C1382D240F4.png",
+    "category": "Greetings"
+  },
+  {
+    "phrase": "Good morning",
+    "imageUrl": "https://i.ytimg.com/vi/5XtH1Q3T0Eg/hq720.jpg",
+    "category": "Greetings"
+  },
+  {
+    "phrase": "Thank you",
+    "imageUrl": "https://ichef.bbci.co.uk/childrens-responsive-ichef-live/480/childrens-binary-store/r/1x/cbeebies/ThankYou_content_card.jpg",
+    "category": "Greetings"
+  },
+  {
+    "phrase": "Please",
+    "imageUrl": "https://blogs.glowscotland.org.uk/cl/public/deerparkprimaryschool/uploads/sites/3106/2015/06/please.png",
+    "category": "Greetings"
+  },
+  {
+    "phrase": "Mum",
+    "imageUrl": "https://i.ytimg.com/vi/-OOZxDWYow8/maxresdefault.jpg",
+    "category": "People"
+  },
+  {
+    "phrase": "Dad",
+    "imageUrl": "https://blogs.glowscotland.org.uk/cl/public/deerparkprimaryschool/uploads/sites/3106/2015/06/dad.png",
+    "category": "People"
+  },
+  {
+    "phrase": "Brother",
+    "imageUrl": "https://i.ytimg.com/vi/-nV1eRGLvJ4/maxresdefault.jpg",
+    "category": "People"
+  },
+  {
+    "phrase": "Sister",
+    "imageUrl": "https://i.pinimg.com/736x/7e/63/83/7e6383e1f910ea28c0a324b4b0d4fb9f.jpg",
+    "category": "People"
+  },
+  {
+    "phrase": "Friend",
+    "imageUrl": "https://www.makaton.org/wp-content/uploads/2023/09/friend.png",
+    "category": "People"
+  },
+  {
+    "phrase": "Teacher",
+    "imageUrl": "https://www.southgateschool.co.uk/wp-content/uploads/2020/11/Makaton-teacher-2.jpg",
+    "category": "People"
+  },
+  {
+    "phrase": "Happy",
+    "imageUrl": "https://i.pinimg.com/736x/17/a3/0d/17a30dec40e5001c0f41c986293ce02c.jpg",
+    "category": "Feelings"
+  },
+  {
+    "phrase": "Sad",
+    "imageUrl": "https://i.pinimg.com/736x/e0/63/62/e06362117df4f04666349dd16a297574.jpg",
+    "category": "Feelings"
+  },
+  {
+    "phrase": "Angry",
+    "imageUrl": "https://www.stjohnsrcschool.co.uk/wp-content/uploads/2024/02/Angry.png",
+    "category": "Feelings"
+  },
+  {
+    "phrase": "Scared",
+    "imageUrl": "https://newfield.org.uk/perch/resources/frighened-w600.png",
+    "category": "Feelings"
+  },
+  {
+    "phrase": "Tired",
+    "imageUrl": "https://i.ytimg.com/vi/A74hU3N6uBo/maxresdefault.jpg",
+    "category": "Feelings"
+  },
+  {
+    "phrase": "Good",
+    "imageUrl": "https://www.makaton.org/wp-content/uploads/2023/10/good.png",
+    "category": "Feelings"
+  },
+  {
+    "phrase": "Bad",
+    "imageUrl": "https://www.makaton.org/wp-content/uploads/2023/10/bad.png",
+    "category": "Feelings"
+  },
+  {
+    "phrase": "Eat",
+    "imageUrl": "https://makaton.org.nz/wp-content/uploads/2022/04/toeat_symbol.png",
+    "category": "Food & Drink"
+  },
+  {
+    "phrase": "Drink",
+    "imageUrl": "https://www.riverbankspecialsch.co.uk/_site/data/files/images/makaton/1664307CF9AB3843ACCC629D1198A29B.png",
+    "category": "Food & Drink"
+  },
+  {
+    "phrase": "More",
+    "imageUrl": "https://i.ytimg.com/vi/Of1TpM-U3Xs/maxresdefault.jpg",
+    "category": "Food & Drink"
+  },
+  {
+    "phrase": "Finished",
+    "imageUrl": "https://www.makaton.org/wp-content/uploads/2023/08/finished.png",
+    "category": "Food & Drink"
+  },
+  {
+    "phrase": "Apple",
+    "imageUrl": "https://www.makaton.org/wp-content/uploads/2023/09/apple.png",
+    "category": "Food & Drink"
+  },
+  {
+    "phrase": "Milk",
+    "imageUrl": "https://www.makaton.org/wp-content/uploads/2023/09/milk.png",
+    "category": "Food & Drink"
+  },
+  {
+    "phrase": "Water",
+    "imageUrl": "https://www.makaton.org/wp-content/uploads/2023/09/water.png",
+    "category": "Food & Drink"
+  },
+  {
+    "phrase": "Biscuit",
+    "imageUrl": "https://singinghands.co.uk/wp-content/uploads/2016/06/Makaton-line-drawing-BISCUIT.png",
+    "category": "Food & Drink"
+  },
+  {
+    "phrase": "Home",
+    "imageUrl": "https://www.makaton.org/wp-content/uploads/2023/09/home.png",
+    "category": "Common Places"
+  },
+  {
+    "phrase": "School",
+    "imageUrl": "https://www.southgateschool.co.uk/wp-content/uploads/2020/11/Makaton-School-2.jpg",
+    "category": "Common Places"
+  },
+  {
+    "phrase": "Toilet",
+    "imageUrl": "https://ichef.bbci.co.uk/childrens-responsive-ichef-live/480/childrens-binary-store/r/1x/cbeebies/Toilet_content_card.jpg",
+    "category": "Common Places"
+  },
+  {
+    "phrase": "Park",
+    "imageUrl": "https://PLACEHOLDER.com/image.png",
+    "category": "Common Places"
+  },
+  {
+    "phrase": "Shop",
+    "imageUrl": "https://PLACEHOLDER.com/image.png",
+    "category": "Common Places"
+  },
+  {
+    "phrase": "Help",
+    "imageUrl": "https://share.google/images/rZ8Zb1jxctYuvCFPx",
+    "category": "Action Words"
+  },
+  {
+    "phrase": "Wait",
+    "imageUrl": "https://share.google/images/rZ8Zb1jxctYuvCFPx",
+    "category": "Action Words"
+  },
+  {
+    "phrase": "Want",
+    "imageUrl": "https://i.ytimg.com/vi/1Njb6RtMbsY/maxresdefault.jpg",
+    "category": "Action Words"
+  },
+  {
+    "phrase": "Stop",
+    "imageUrl": "https://pbs.twimg.com/media/EDZbpG9XYAENN5C.jpg",
+    "category": "Action Words"
+  },
+  {
+    "phrase": "Go",
+    "imageUrl": "https://i.ytimg.com/vi/mFFxeLG0pVg/maxresdefault.jpg",
+    "category": "Action Words"
+  },
+  {
+    "phrase": "Look",
+    "imageUrl": "https://www.makaton.org/wp-content/uploads/2023/09/look.png",
+    "category": "Action Words"
+  },
+  {
+    "phrase": "How",
+    "imageUrl": "https://share.google/images/KIMeJRiBsQiqyOOTa",
+    "category": "Question Words"
+  },
+  {
+    "phrase": "What",
+    "imageUrl": "https://share.google/images/awn7BF2fx692OP7KA",
+    "category": "Question Words"
+  },
+  {
+    "phrase": "Where",
+    "imageUrl": "https://share.google/images/awn7BF2fx692OP7KA",
+    "category": "Question Words"
+  },
+  {
+    "phrase": "Who",
+    "imageUrl": "https://share.google/images/awn7BF2fx692OP7KA",
+    "category": "Question Words"
+  },
+  {
+    "phrase": "Which",
+    "imageUrl": "https://share.google/images/awn7BF2fx692OP7KA",
+    "category": "Question Words"
+  },
+  {
+    "phrase": "When",
+    "imageUrl": "https://share.google/images/awn7BF2fx692OP7KA",
+    "category": "Question Words"
+  },
+  {
+    "phrase": "Cat",
+    "imageUrl": "https://www.makaton.org/wp-content/uploads/2023/09/cat.png",
+    "category": "Animals"
+  },
+  {
+    "phrase": "Dog",
+    "imageUrl": "https://i.pinimg.com/1200x/3c/e5/50/3ce5506908fd7c2236a16e57db61a8f6.jpg",
+    "category": "Animals"
+  },
+  {
+    "phrase": "Red",
+    "imageUrl": "https://x.com/bensonschool/status/1411967929588011009/photo/1",
+    "category": "Colors"
+  },
+  {
+    "phrase": "Blue",
+    "imageUrl": "https://x.com/bensonschool/status/1411967929588011009/photo/1",
+    "category": "Colors"
+  },
+  {
+    "phrase": "Yellow",
+    "imageUrl": "https://x.com/bensonschool/status/1411967929588011009/photo/1",
+    "category": "Colors"
+  },
+  {
+    "phrase": "Green",
+    "imageUrl": "https://x.com/bensonschool/status/1411967929588011009/photo/1",
+    "category": "Colors"
+  }
+]
