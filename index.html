@@ -13,7 +13,6 @@
             --white: #ffffff;
             --shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
@@ -21,7 +20,6 @@
             background-color: var(--light-gray);
             color: var(--dark-gray);
         }
-
         .container {
             max-width: 800px;
             margin: 0 auto;
@@ -30,17 +28,8 @@
             border-radius: 8px;
             box-shadow: var(--shadow);
         }
-
-        h1, h2 {
-            text-align: center;
-        }
-
-        h1 {
-            color: var(--primary-color);
-            margin-top: 0;
-        }
-
-        /* Search Bar */
+        h1, h2 { text-align: center; }
+        h1 { color: var(--primary-color); margin-top: 0; }
         #search-bar {
             width: 100%;
             padding: 12px;
@@ -50,22 +39,16 @@
             margin-bottom: 25px;
             font-size: 16px;
         }
-        
-        /* Loading Indicator */
         #loading-indicator {
             text-align: center;
             font-size: 1.2em;
             color: #666;
         }
-
-        /* Dictionary Grid */
         #dictionary-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 20px;
         }
-
-        /* Individual Sign Card */
         .sign-card {
             background: var(--white);
             border: 1px solid #ddd;
@@ -84,6 +67,12 @@
             border-radius: 5px;
             background-color: #eee;
             margin-bottom: 10px;
+            /* --- NEW: Make image clickable --- */
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .sign-card img:hover {
+            transform: scale(1.05); /* Slight zoom on hover */
         }
         .card-category {
             font-size: 0.9em;
@@ -95,6 +84,44 @@
             margin: 0;
             color: var(--dark-gray);
             font-size: 1.1em;
+        }
+
+        /* --- NEW: Modal (Lightbox) Styles --- */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.85); /* Black w/ opacity */
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            margin: auto;
+            display: block;
+            width: auto;
+            height: auto;
+            max-width: 90%;
+            max-height: 85vh; /* 85% of the viewport height */
+        }
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        .modal-close:hover,
+        .modal-close:focus {
+            color: #bbb;
+            text-decoration: none;
         }
     </style>
 </head>
@@ -114,6 +141,11 @@
             </div>
     </div>
 
+    <div id="imageModal" class="modal">
+        <span class="modal-close">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
 
@@ -122,58 +154,50 @@
             const container = document.getElementById('dictionary-container');
             const loadingIndicator = document.getElementById('loading-indicator');
 
-            // --- DATA ---
-            let allSigns = []; // This will hold our "master list" of signs
+            // --- NEW: Get modal elements ---
+            const modal = document.getElementById('imageModal');
+            const modalImage = document.getElementById('modalImage');
+            const closeModalBtn = document.querySelector('.modal-close');
 
-            // --- FUNCTIONS ---
+            let allSigns = []; // This will hold our "master list" of signs
 
             /**
              * Renders a given list of signs to the page.
              */
             function renderSigns(signsToRender) {
                 container.innerHTML = '';
-                
                 if (signsToRender.length === 0 && allSigns.length > 0) {
                     container.innerHTML = '<p>No signs found. Try a different search term.</p>';
                     return;
                 }
-
                 signsToRender.sort((a, b) => a.phrase.localeCompare(b.phrase));
-
                 signsToRender.forEach(sign => {
                     const card = document.createElement('div');
                     card.className = 'sign-card';
                     const displayCategory = sign.category || 'Uncategorized';
-                    
-                    // Card no longer has a delete button
                     card.innerHTML = `
                         <img src="${sign.imageUrl}" alt="Makaton sign for ${sign.phrase}">
                         <p class="card-category">${displayCategory}</p>
                         <h3>${sign.phrase}</h3>
                     `;
-                    
                     container.appendChild(card);
                 });
             }
 
             /**
              * Filters the allSigns array based on the search bar's value
-             * and calls renderSigns.
              */
             function filterAndRender() {
                 const searchTerm = searchBar.value.toLowerCase();
-
                 if (searchTerm.trim() === '') {
-                    renderSigns(allSigns); // Render all signs if search is empty
+                    renderSigns(allSigns);
                     return;
                 }
-
                 const filteredSigns = allSigns.filter(sign => {
                     const category = sign.category || 'uncategorized'; 
                     return sign.phrase.toLowerCase().includes(searchTerm) ||
                            category.toLowerCase().includes(searchTerm);
                 });
-                
                 renderSigns(filteredSigns);
             }
             
@@ -182,28 +206,51 @@
              */
             async function loadData() {
                 try {
-                    // We add a cache-busting query to prevent old versions
-                    const response = await fetch('./mysigns.json?t=' + new Date().getTime());
-                    
+                    const response = await fetch('./my_signs.json?t=' + new Date().getTime());
                     if (!response.ok) {
                         throw new Error(`HTTP error! Status: ${response.status}`);
                     }
-                    
                     const data = await response.json();
-                    allSigns = data; // Store the data in our master array
-                    
-                    loadingIndicator.style.display = 'none'; // Hide loading
-                    renderSigns(allSigns); // Render all signs on initial load
-                    
+                    allSigns = data; 
+                    loadingIndicator.style.display = 'none';
+                    renderSigns(allSigns); 
                 } catch (error) {
                     console.error('Failed to load sign data:', error);
                     loadingIndicator.style.display = 'none';
-                    container.innerHTML = '<p style="color: red; text-align: center;"><b>Error: Could not load the dictionary data.</b><br>Please make sure the `mysigns.json` file is uploaded to the main repository folder and is a valid JSON file.</p>';
+                    container.innerHTML = '<p style="color: red; text-align: center;"><b>Error: Could not load the dictionary data.</b></p>';
                 }
+            }
+
+            // --- NEW: Modal open/close functions ---
+
+            // Function to open the modal
+            function openModal(e) {
+                // Check if the click was on an image inside a sign card
+                if (e.target.tagName === 'IMG' && e.target.closest('.sign-card')) {
+                    modal.style.display = 'flex'; // Use flex to center
+                    modalImage.src = e.target.src;
+                }
+            }
+
+            // Function to close the modal
+            function closeTheModal() {
+                modal.style.display = 'none';
+                modalImage.src = ''; // Clear src
             }
 
             // --- EVENT LISTENERS ---
             searchBar.addEventListener('input', filterAndRender);
+            
+            // --- NEW: Listeners for modal ---
+            container.addEventListener('click', openModal); // Listen for clicks on the grid
+            closeModalBtn.addEventListener('click', closeTheModal); // Listen for clicks on the 'X'
+            
+            // Also close if user clicks on the dark background
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) { // Check if click was on the overlay itself
+                    closeTheModal();
+                }
+            });
 
             // --- INITIAL LOAD ---
             loadData(); // Load the global data when the page starts
