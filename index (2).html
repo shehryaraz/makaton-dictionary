@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Alisha Talks</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --accent:#3b82f6;--accent-light:#eff6ff;--accent-border:#bfdbfe;--accent-text:#1d4ed8;
+  --success:#16a34a;--success-light:#f0fdf4;--success-border:#bbf7d0;--success-text:#15803d;
+  --warning:#d97706;--warning-light:#fffbeb;--warning-border:#fde68a;--warning-text:#92400e;
+  --danger:#dc2626;--danger-light:#fef2f2;--danger-border:#fecaca;--danger-text:#991b1b;
+  --purple:#7c3aed;--purple-light:#f5f3ff;--purple-border:#ddd6fe;--purple-text:#5b21b6;
+  --bg:#f8f9fa;--surface:#ffffff;--surface2:#f1f5f9;
+  --text:#1e293b;--text2:#475569;--text3:#94a3b8;
+  --border:#e2e8f0;--border2:#cbd5e1;
+  --radius:10px;--shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.06);
+}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.app{max-width:720px;margin:0 auto;padding:0 0 80px}
+
+/* HEADER */
+.header{background:var(--surface);border-bottom:1px solid var(--border);padding:14px 16px 0;position:sticky;top:0;z-index:100}
+.header-top{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.app-icon{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#6366f1,#3b82f6);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.app-title{font-size:17px;font-weight:600;color:var(--text)}
+.app-subtitle{font-size:12px;color:var(--text3);margin-top:1px}
+.nav{display:flex;gap:0;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav-btn{flex-shrink:0;padding:10px 16px;border:none;background:none;color:var(--text2);font-size:13px;font-weight:500;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;display:flex;align-items:center;gap:5px}
+.nav-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
+.nav-btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* SECTIONS */
+.section{display:none;padding:16px}
+.section.active{display:block}
+
+/* BOARD */
+.cat-scroll{display:flex;gap:6px;overflow-x:auto;margin-bottom:14px;padding-bottom:2px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.cat-scroll::-webkit-scrollbar{display:none}
+.cat-btn{flex-shrink:0;padding:6px 14px;border-radius:20px;border:1px solid var(--border2);background:var(--surface);color:var(--text2);font-size:12px;font-weight:500;cursor:pointer;white-space:nowrap}
+.cat-btn.active{background:var(--success-light);border-color:var(--success-border);color:var(--success-text)}
+.spoken-bar{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:10px 14px;margin-bottom:14px;display:flex;align-items:center;gap:8px;min-height:46px}
+.spoken-words{flex:1;font-size:14px;color:var(--text3);font-style:italic}
+.spoken-words.has{color:var(--text);font-style:normal;font-weight:500}
+.spoken-clear{background:none;border:none;color:var(--text3);font-size:12px;cursor:pointer;padding:4px 6px;border-radius:6px}
+.spoken-clear:hover{background:var(--surface2)}
+.word-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:8px}
+.word-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 6px 10px;text-align:center;cursor:pointer;transition:transform .1s,box-shadow .1s;user-select:none;position:relative}
+.word-card:active{transform:scale(0.93)}
+.word-card.flash{background:var(--accent-light);border-color:var(--accent-border)}
+.word-card .em{font-size:26px;margin-bottom:5px;display:block}
+.word-card .lbl{font-size:11px;font-weight:600;color:var(--text);line-height:1.2}
+.word-card .ph{font-size:9px;color:var(--text3);margin-top:2px}
+.word-card .sign-dot{position:absolute;top:5px;right:5px;width:7px;height:7px;border-radius:50%;background:var(--success);opacity:.7}
+
+/* SIGN BOTTOM SHEET */
+.sign-sheet-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:400}
+.sign-sheet-backdrop.open{display:block}
+.sign-sheet{position:fixed;bottom:0;left:0;right:0;max-width:720px;margin:0 auto;background:var(--surface);border-radius:20px 20px 0 0;z-index:500;padding:0 0 32px;transform:translateY(100%);transition:transform .28s cubic-bezier(.32,.72,0,1)}
+.sign-sheet.open{transform:translateY(0)}
+.sheet-handle{width:36px;height:4px;background:var(--border2);border-radius:2px;margin:10px auto 14px}
+.sheet-close{position:absolute;top:10px;right:14px;background:none;border:none;font-size:24px;line-height:1;cursor:pointer;color:var(--text3);padding:4px}
+.sheet-body{display:flex;align-items:flex-start;gap:14px;padding:0 16px}
+.sheet-img-wrap{flex-shrink:0;width:140px;height:140px;border-radius:12px;background:var(--surface2);overflow:hidden;display:flex;align-items:center;justify-content:center}
+.sheet-img-wrap img{width:100%;height:100%;object-fit:contain}
+.sheet-img-wrap .sheet-emoji{font-size:52px}
+.sheet-info{flex:1;padding-top:4px}
+.sheet-word{font-size:22px;font-weight:700;color:var(--text);margin-bottom:4px}
+.sheet-ph{font-size:13px;color:var(--text3);margin-bottom:10px}
+.sheet-cat{font-size:11px;padding:3px 10px;border-radius:20px;background:var(--success-light);color:var(--success-text);display:inline-block;margin-bottom:12px}
+.sheet-hint{font-size:12px;color:var(--text2);line-height:1.5}
+.sheet-replay{margin-top:12px;padding:8px 14px;border-radius:var(--radius);border:1px solid var(--border2);background:var(--surface2);color:var(--text2);font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px}
+.sheet-replay:active{background:var(--border2)}
+
+/* HANEN */
+.quick-pills{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:18px}
+.qpill{background:var(--warning-light);border:1px solid var(--warning-border);border-radius:10px;padding:10px 6px;text-align:center;font-size:11px;font-weight:600;color:var(--warning-text)}
+.qpill .qi{font-size:20px;display:block;margin-bottom:4px}
+.section-label{font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
+.p-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:10px}
+.p-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.p-badge{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.p-title{font-size:14px;font-weight:600;color:var(--text)}
+.p-sub{font-size:12px;color:var(--text2);margin-top:1px}
+.p-tips{border-top:1px solid var(--border);padding-top:10px}
+.p-tip{font-size:12px;color:var(--text2);line-height:1.6;padding:2px 0;display:flex;gap:6px}
+.p-tip::before{content:"→";color:var(--accent);flex-shrink:0}
+
+/* LOG */
+.log-form{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:16px}
+.log-row{margin-bottom:14px}
+.log-lbl{font-size:12px;font-weight:600;color:var(--text2);display:block;margin-bottom:6px}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chip{padding:4px 11px;border-radius:20px;font-size:12px;cursor:pointer;background:var(--surface2);border:1px solid var(--border);color:var(--text2);user-select:none}
+.chip.on{background:var(--success-light);border-color:var(--success-border);color:var(--success-text);font-weight:500}
+.chip.mode-on{background:var(--accent-light);border-color:var(--accent-border);color:var(--accent-text);font-weight:500}
+.log-input{width:100%;padding:9px 11px;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:13px;font-family:inherit}
+.log-input:focus{outline:none;border-color:var(--accent)}
+.log-textarea{width:100%;padding:9px 11px;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:13px;font-family:inherit;resize:vertical;min-height:70px}
+.log-textarea:focus{outline:none;border-color:var(--accent)}
+.save-btn{width:100%;padding:11px;border-radius:var(--radius);border:none;background:var(--accent);color:#fff;font-size:14px;font-weight:600;cursor:pointer}
+.save-btn:active{opacity:.85}
+.entry{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:8px}
+.entry-hdr{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.entry-date{font-size:13px;font-weight:600}
+.entry-time{font-size:11px;color:var(--text3)}
+.entry-words{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px}
+.ew{font-size:11px;padding:2px 9px;border-radius:20px;background:var(--success-light);color:var(--success-text);border:1px solid var(--success-border)}
+.entry-modes{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px}
+.em2{font-size:10px;padding:2px 9px;border-radius:20px;background:var(--accent-light);color:var(--accent-text)}
+.entry-mood{font-size:11px;color:var(--text3);margin-bottom:4px}
+.entry-notes{font-size:12px;color:var(--text2);line-height:1.55}
+.empty{text-align:center;padding:32px 16px;color:var(--text3)}
+.empty-icon{font-size:32px;margin-bottom:8px}
+
+/* DICTIONARY */
+.dict-search{width:100%;padding:10px 12px;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:14px;margin-bottom:14px}
+.dict-search:focus{outline:none;border-color:var(--accent)}
+.dict-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+.dict-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;box-shadow:var(--shadow)}
+.dict-card img{width:100%;height:130px;object-fit:cover;background:var(--surface2);display:block}
+.dict-card-info{padding:8px 10px}
+.dict-card-cat{font-size:10px;color:var(--text3);margin-bottom:2px}
+.dict-card-phrase{font-size:13px;font-weight:600;color:var(--text)}
+.dict-loading{text-align:center;padding:32px;color:var(--text3);font-size:14px}
+.dict-cat-bar{display:flex;gap:6px;overflow-x:auto;margin-bottom:14px;padding-bottom:2px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.dict-cat-bar::-webkit-scrollbar{display:none}
+.dict-cat-btn{flex-shrink:0;padding:5px 12px;border-radius:20px;border:1px solid var(--border2);background:var(--surface);color:var(--text2);font-size:12px;font-weight:500;cursor:pointer;white-space:nowrap}
+.dict-cat-btn.active{background:var(--accent-light);border-color:var(--accent-border);color:var(--accent-text)}
+
+/* RESOURCES */
+.res-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:10px}
+.res-card h3{font-size:14px;font-weight:600;color:var(--text);margin-bottom:8px;display:flex;align-items:center;gap:7px}
+.res-card h3 span.ico{font-size:16px}
+.res-card li{font-size:12px;color:var(--text2);line-height:1.6;padding:2px 0;list-style:none;display:flex;gap:6px}
+.res-card li::before{content:"→";color:var(--accent);flex-shrink:0}
+.res-card p{font-size:12px;color:var(--text2);line-height:1.6}
+.rg{margin-bottom:18px}
+</style>
+</head>
+<body>
+<div class="app">
+
+<div class="header">
+  <div class="header-top">
+    <div class="app-icon">💬</div>
+    <div>
+      <div class="app-title">Alisha Talks</div>
+      <div class="app-subtitle">Alisha's speech &amp; communication companion</div>
+    </div>
+  </div>
+  <nav class="nav">
+    <button class="nav-btn active" onclick="show('board')" id="nb-board">
+      <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Board
+    </button>
+    <button class="nav-btn" onclick="show('hanen')" id="nb-hanen">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Hanen
+    </button>
+    <button class="nav-btn" onclick="show('log')" id="nb-log">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>Log
+    </button>
+    <button class="nav-btn" onclick="show('dict')" id="nb-dict">
+      <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Signs
+    </button>
+    <button class="nav-btn" onclick="show('resources')" id="nb-resources">
+      <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.44 2 2 0 0 1 3.6 1.26h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.84a16 16 0 0 0 6 6l.94-.94a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.03z"/></svg>Resources
+    </button>
+  </nav>
+</div>
+
+<!-- BOARD -->
+<div class="section active" id="s-board">
+  <div class="cat-scroll" id="cat-scroll"></div>
+  <div class="spoken-bar">
+    <span class="spoken-words" id="spoken-words">Tap a card to hear the word</span>
+    <button class="spoken-clear" onclick="clearSpoken()">Clear</button>
+  </div>
+  <div class="word-grid" id="word-grid"></div>
+</div>
+
+<!-- HANEN -->
+<div class="section" id="s-hanen">
+  <div class="section-label" style="margin-bottom:10px">Before you start</div>
+  <div class="quick-pills">
+    <div class="qpill"><span class="qi">👁️</span>Observe first</div>
+    <div class="qpill"><span class="qi">⏸️</span>Wait 5 sec</div>
+    <div class="qpill"><span class="qi">👂</span>Listen</div>
+    <div class="qpill"><span class="qi">🐢</span>Slow down</div>
+    <div class="qpill"><span class="qi">💬</span>Say less</div>
+    <div class="qpill"><span class="qi">😊</span>Keep it fun</div>
+  </div>
+  <div class="section-label">Core principles</div>
+
+  <div class="p-card">
+    <div class="p-head">
+      <div class="p-badge" style="background:var(--accent-light);color:var(--accent-text)">OWL</div>
+      <div><div class="p-title">Observe, Wait, Listen</div><div class="p-sub">Let her lead every interaction</div></div>
+    </div>
+    <div class="p-tips">
+      <div class="p-tip">Watch what she's interested in before you say anything</div>
+      <div class="p-tip">Count 5 seconds silently after any sound or gesture she makes</div>
+      <div class="p-tip">Her focus is the topic — follow it, don't redirect</div>
+      <div class="p-tip">Even a look toward something counts as communication — name it</div>
+    </div>
+  </div>
+
+  <div class="p-card">
+    <div class="p-head">
+      <div class="p-badge" style="background:var(--success-light);color:var(--success-text)">4S</div>
+      <div><div class="p-title">The four S's</div><div class="p-sub">How to shape your language around her</div></div>
+    </div>
+    <div class="p-tips">
+      <div class="p-tip"><strong>Say less</strong> — match her level, then go one word above it</div>
+      <div class="p-tip"><strong>Stress key words</strong> — "Mama is HERE" — pause on what matters</div>
+      <div class="p-tip"><strong>Go slow</strong> — leave gaps. She needs processing time</div>
+      <div class="p-tip"><strong>Show</strong> — pair every word with a sign, gesture or object</div>
+    </div>
+  </div>
+
+  <div class="p-card">
+    <div class="p-head">
+      <div class="p-badge" style="background:var(--warning-light);color:var(--warning-text)">→+</div>
+      <div><div class="p-title">Expand, don't correct</div><div class="p-sub">Build on whatever she offers</div></div>
+    </div>
+    <div class="p-tips">
+      <div class="p-tip">She says "Mama" → you say "Mama is here!" or "Mama, juice"</div>
+      <div class="p-tip">She signs "eat" → you say "Eat! You want to eat, yes!"</div>
+      <div class="p-tip">She points → you name it, sign it, celebrate it</div>
+      <div class="p-tip">Never "say it properly" — honour every attempt, always</div>
+    </div>
+  </div>
+
+  <div class="p-card">
+    <div class="p-head">
+      <div class="p-badge" style="background:var(--danger-light);color:var(--danger-text)">Q?</div>
+      <div><div class="p-title">Reduce questions</div><div class="p-sub">Comments invite, questions pressure</div></div>
+    </div>
+    <div class="p-tips">
+      <div class="p-tip">Instead of "What's that?" → "Oh, a ball! Big red ball."</div>
+      <div class="p-tip">Instead of "What do you want?" → "Juice or milk?" (offer choices)</div>
+      <div class="p-tip">Aim for max 1 question per 5 minutes of play</div>
+    </div>
+  </div>
+
+  <div class="p-card">
+    <div class="p-head">
+      <div class="p-badge" style="background:var(--purple-light);color:var(--purple-text)">♻</div>
+      <div><div class="p-title">Routines are therapy</div><div class="p-sub">Use daily moments intentionally</div></div>
+    </div>
+    <div class="p-tips">
+      <div class="p-tip">Bath time: name body parts, water, soap — same words every time</div>
+      <div class="p-tip">Meals: name food before giving it, use "more?" with the sign</div>
+      <div class="p-tip">Potty: consistent phrase every time — "Toilet time → sit down → well done"</div>
+      <div class="p-tip">Bedtime: predictable book + song builds language through repetition</div>
+    </div>
+  </div>
+</div>
+
+<!-- LOG -->
+<div class="section" id="s-log">
+  <div class="log-form">
+    <div class="section-label" style="margin-bottom:12px">Log today's session</div>
+    <div class="log-row">
+      <label class="log-lbl">Words or sounds used (tap to select)</label>
+      <div class="chips" id="log-chips"></div>
+      <input class="log-input" id="log-custom" placeholder="Type a word she used and press Enter" style="margin-top:8px" />
+    </div>
+    <div class="log-row">
+      <label class="log-lbl">Communication mode</label>
+      <div class="chips">
+        <div class="chip" onclick="toggleChip(this,'mode')">Speech</div>
+        <div class="chip" onclick="toggleChip(this,'mode')">Sign</div>
+        <div class="chip" onclick="toggleChip(this,'mode')">Point / gesture</div>
+        <div class="chip" onclick="toggleChip(this,'mode')">Eye contact</div>
+        <div class="chip" onclick="toggleChip(this,'mode')">App / picture</div>
+      </div>
+    </div>
+    <div class="log-row">
+      <label class="log-lbl">Mood &amp; energy</label>
+      <select class="log-input" id="log-mood">
+        <option value="">Select...</option>
+        <option>High energy, engaged</option>
+        <option>Calm and receptive</option>
+        <option>Tired but willing</option>
+        <option>Resistant / withdrawn</option>
+        <option>Distracted</option>
+      </select>
+    </div>
+    <div class="log-row" style="margin-bottom:0">
+      <label class="log-lbl">Notes — what worked, moments of connection</label>
+      <textarea class="log-textarea" id="log-notes" placeholder="e.g. Signed 'more' at lunch unprompted. Responded well to the bath routine."></textarea>
+    </div>
+    <div style="margin-top:12px">
+      <button class="save-btn" onclick="saveEntry()">Save entry</button>
+    </div>
+  </div>
+  <div class="section-label">Recent entries</div>
+  <div id="log-entries"></div>
+</div>
+
+<!-- DICTIONARY (loads from mysigns.json) -->
+<div class="section" id="s-dict">
+  <input class="dict-search" id="dict-search" type="search" placeholder="Search signs or categories...">
+  <div class="dict-cat-bar" id="dict-cat-bar"></div>
+  <div id="dict-loading" class="dict-loading">Loading your signs...</div>
+  <div class="dict-grid" id="dict-grid"></div>
+</div>
+
+<!-- RESOURCES -->
+<div class="section" id="s-resources">
+  <div class="rg">
+    <div class="section-label">Makaton — core signs to reinforce now</div>
+    <div class="res-card">
+      <h3><span class="ico">🤟</span>Priority signs</h3>
+      <ul>
+        <li>More — fists together, tap twice. Use at every meal and play</li>
+        <li>Finished / all done — hands flat, flick outward. End every activity with it</li>
+        <li>Help — one open hand on top of the other, lift both up</li>
+        <li>Toilet — index and middle fingers together, tap wrist twice</li>
+        <li>Eat / food — fingers bunched together, tap lips</li>
+        <li>Drink — thumb to mouth, tilt fist as if drinking</li>
+        <li>Sleep — hands together, tilt head and rest on them</li>
+        <li>No — index and middle finger tap on thumb, like a beak closing</li>
+      </ul>
+    </div>
+    <div class="res-card">
+      <h3><span class="ico">🚽</span>Potty training — consistent language</h3>
+      <p style="margin-bottom:8px">Use the exact same phrase and sign every single time.</p>
+      <ul>
+        <li>"Toilet time" — say it + sign toilet</li>
+        <li>"Sit down" — say it + gesture to seat</li>
+        <li>"Well done! Finished!" — say + sign finished, big celebration</li>
+        <li>"Wash hands" — say + mime rubbing hands together</li>
+      </ul>
+    </div>
+  </div>
+  <div class="rg">
+    <div class="section-label">Questions for your SLP</div>
+    <div class="res-card">
+      <h3><span class="ico">💬</span>Bring to next session</h3>
+      <ul>
+        <li>Are we seeing signs of verbal apraxia? Should we try PROMPT therapy?</li>
+        <li>What is our 4-week target word count?</li>
+        <li>Which signs should we prioritise right now alongside speech?</li>
+        <li>How do we handle refusals to communicate without reinforcing withdrawal?</li>
+        <li>Should we introduce a low-tech picture board as a bridge?</li>
+        <li>Can you model how to expand her utterances at home?</li>
+      </ul>
+    </div>
+  </div>
+  <div class="rg">
+    <div class="section-label">Questions for Downright Excellent</div>
+    <div class="res-card">
+      <h3><span class="ico">❤️</span>For your next DeX session</h3>
+      <ul>
+        <li>Have you seen this pattern of regression after school transitions before?</li>
+        <li>What does your data show as a typical rebuild timeline?</li>
+        <li>Is RDSD worth formally ruling out given the multi-modal regression?</li>
+        <li>Can you recommend families who've been through something similar?</li>
+        <li>What AAC tools do you recommend for her age and current profile?</li>
+      </ul>
+    </div>
+  </div>
+  <div class="rg">
+    <div class="section-label">Daily environment checklist</div>
+    <div class="res-card">
+      <h3><span class="ico">✅</span>Set up for success every day</h3>
+      <ul>
+        <li>Screen time only as post-therapy wind-down — not during learning windows</li>
+        <li>TV off during meals and play — reduce auditory competition</li>
+        <li>Get face-to-face at her eye level when speaking</li>
+        <li>Narrate your own actions: "Mama is washing the cup"</li>
+        <li>Celebrate every attempt — a sound, a look, a gesture all count</li>
+        <li>One person speaks at a time — no overlapping voices</li>
+        <li>Consistent bedtime routine: same books, same songs, every night</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+</div><!-- end .app -->
+
+<!-- SIGN BOTTOM SHEET -->
+<div class="sign-sheet-backdrop" id="sheet-backdrop" onclick="closeSheet()"></div>
+<div class="sign-sheet" id="sign-sheet">
+  <div class="sheet-handle"></div>
+  <button class="sheet-close" onclick="closeSheet()">×</button>
+  <div class="sheet-body">
+    <div class="sheet-img-wrap" id="sheet-img-wrap">
+      <span class="sheet-emoji" id="sheet-emoji"></span>
+    </div>
+    <div class="sheet-info">
+      <div class="sheet-word" id="sheet-word"></div>
+      <div class="sheet-ph" id="sheet-ph"></div>
+      <div class="sheet-cat" id="sheet-cat"></div>
+      <div class="sheet-hint" id="sheet-hint"></div>
+      <button class="sheet-replay" onclick="replayWord()">🔊 Hear again</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const cats = [
+  {id:'family',label:'Family',words:[
+    {e:'👩',l:'Mama',p:'mah·mah',mk:'Mother'},
+    {e:'👨',l:'Baba',p:'bah·bah',mk:'Father'},
+    {e:'👧',l:'Alisha',p:'ah·lee·shah'},
+    {e:'👧',l:'Me',p:'mee'},
+    {e:'👧',l:'Aliza',p:'ah·lee·zah'},
+    {e:'👧',l:'Alina',p:'ah·lee·nah'},
+    {e:'👴',l:'Dada',p:'dah·dah'},
+    {e:'👵',l:'Dado',p:'dah·doh'},
+    {e:'👨',l:'Chachu',p:'chah·choo'},
+    {e:'👩',l:'Chachi',p:'chah·chee'},
+    {e:'🤗',l:'Hug',p:'hug'},
+    {e:'❤️',l:'Love',p:'luv'},
+    {e:'👋',l:'Hello',p:'heh·lo',mk:'Hello'},
+    {e:'🙋',l:'Goodbye',p:'good·by',mk:'Goodbye'},
+    {e:'👪',l:'Family',p:'fam·lee',mk:'Family'},
+  ]},
+  {id:'food',label:'Food & drink',words:[
+    {e:'🍎',l:'Apple',p:'ap·ul',mk:'Apple'},
+    {e:'🍌',l:'Banana',p:'bah·nah·nah',mk:'Banana'},
+    {e:'🥛',l:'Milk',p:'milk',mk:'Milk'},
+    {e:'💧',l:'Water',p:'waw·ter'},
+    {e:'🍞',l:'Bread',p:'bred'},
+    {e:'🍪',l:'Biscuit',p:'bis·kit',mk:'Biscuit'},
+    {e:'🍽️',l:'Eat',p:'eet',mk:'Eat'},
+    {e:'🥤',l:'Drink',p:'drink',mk:'Drink'},
+    {e:'➕',l:'More',p:'mor',mk:'More'},
+    {e:'✅',l:'Finished',p:'fin·isht',mk:'Finished'},
+    {e:'🙏',l:'Please',p:'pleez',mk:'Please'},
+    {e:'😊',l:'Thank you',p:'tank·yoo',mk:'Thank you'},
+    {e:'🍊',l:'Orange',p:'or·inj',mk:'Orange (fruit)'},
+  ]},
+  {id:'feelings',label:'Feelings',words:[
+    {e:'😊',l:'Happy',p:'hap·ee',mk:'Happy'},
+    {e:'😢',l:'Sad',p:'sad',mk:'Sad'},
+    {e:'😡',l:'Angry',p:'ang·gree',mk:'Angry'},
+    {e:'😨',l:'Scared',p:'skared',mk:'Frightened'},
+    {e:'😩',l:'Tired',p:'ty·erd',mk:'Tired'},
+    {e:'🤗',l:'Excited',p:'ex·sy·ted',mk:'Excited'},
+    {e:'🙅',l:'No',p:'no'},
+    {e:'🙆',l:'Yes',p:'yes'},
+    {e:'🤕',l:'Hurt',p:'hert'},
+  ]},
+  {id:'play',label:'Play & toys',words:[
+    {e:'⚽',l:'Ball',p:'bawl'},
+    {e:'🎨',l:'Draw',p:'draw'},
+    {e:'📚',l:'Book',p:'book',mk:'Book'},
+    {e:'🎵',l:'Music',p:'myoo·zik'},
+    {e:'🧩',l:'Puzzle',p:'puz·ul'},
+    {e:'🧸',l:'Teddy',p:'ted·ee'},
+    {e:'🎮',l:'Play',p:'play'},
+    {e:'🏃',l:'Run',p:'run'},
+    {e:'🐕',l:'Dog',p:'dawg',mk:'Dog'},
+    {e:'🐱',l:'Cat',p:'kat',mk:'Cat'},
+    {e:'🐦',l:'Bird',p:'berd',mk:'Bird'},
+    {e:'🐇',l:'Rabbit',p:'rab·it',mk:'Rabbit'},
+  ]},
+  {id:'routines',label:'Daily routines',words:[
+    {e:'🛁',l:'Bath',p:'bath'},
+    {e:'😴',l:'Sleep',p:'sleep'},
+    {e:'👕',l:'Get dressed',p:'get·drest'},
+    {e:'🦷',l:'Teeth',p:'teeth'},
+    {e:'🌅',l:'Wake up',p:'wayk·up'},
+    {e:'🏠',l:'Home',p:'home',mk:'Home'},
+    {e:'🏫',l:'School',p:'skool',mk:'School'},
+    {e:'🚗',l:'Car',p:'kar'},
+    {e:'💡',l:'Light on',p:'lyt·on',mk:'Light'},
+    {e:'🌙',l:'Dark',p:'dark',mk:'Dark'},
+  ]},
+  {id:'potty',label:'Potty training',words:[
+    {e:'🚽',l:'Toilet',p:'toy·let',mk:'Toilet'},
+    {e:'🪣',l:'Potty',p:'pot·ee'},
+    {e:'🪑',l:'Sit down',p:'sit·down'},
+    {e:'💧',l:'Wee wee',p:'wee·wee'},
+    {e:'💩',l:'Poo poo',p:'poo·poo'},
+    {e:'🙌',l:'Well done',p:'wel·dun'},
+    {e:'🧻',l:'Paper',p:'pay·per'},
+    {e:'🚿',l:'Wash hands',p:'wosh·handz'},
+    {e:'✅',l:'All done',p:'awl·dun',mk:'Finished'},
+    {e:'⏰',l:'Toilet time',p:'toy·let·tym'},
+    {e:'👍',l:'Good girl',p:'good·gurl'},
+  ]},
+  {id:'people',label:'People',words:[
+    {e:'👴',l:'Grandad',p:'gran·dad',mk:'Grandfather'},
+    {e:'👵',l:'Grandma',p:'gran·mah',mk:'Grandmother'},
+    {e:'👦',l:'Brother',p:'bruth·er',mk:'Brother'},
+    {e:'👧',l:'Sister',p:'sis·ter',mk:'Sister'},
+    {e:'👩‍🏫',l:'Teacher',p:'tee·cher',mk:'Teacher'},
+  ]},
+];
+
+let allSigns = [];
+let currentWord = null;
+let currentCat = 'family';
+let spokenWords = [];
+let logEntries = JSON.parse(localStorage.getItem('sc_log') || '[]');
+let dictCatFilter = 'All';
+const synth = window.speechSynthesis;
+
+function $(id){ return document.getElementById(id); }
+
+/* NAV */
+function show(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  $('s-'+id).classList.add('active');
+  $('nb-'+id).classList.add('active');
+  if(id==='dict' && allSigns.length===0) loadSigns();
+}
+
+/* BOARD */
+function buildCats(){
+  const el = $('cat-scroll');
+  cats.forEach(c=>{
+    const b=document.createElement('button');
+    b.className='cat-btn'+(c.id===currentCat?' active':'');
+    b.textContent=c.label;
+    b.onclick=()=>{currentCat=c.id;buildGrid();updateCatBtns();};
+    el.appendChild(b);
+  });
+}
+function updateCatBtns(){
+  document.querySelectorAll('.cat-btn').forEach((b,i)=>{
+    b.classList.toggle('active',cats[i].id===currentCat);
+  });
+}
+function buildGrid(){
+  const grid=$('word-grid');
+  grid.innerHTML='';
+  const cat=cats.find(c=>c.id===currentCat);
+  if(!cat)return;
+  cat.words.forEach(w=>{
+    const hasMk = w.mk && allSigns.find(s=>s.phrase===w.mk);
+    const card=document.createElement('div');
+    card.className='word-card';
+    card.innerHTML=`${hasMk?'<div class="sign-dot" title="Has sign photo"></div>':''}<span class="em">${w.e}</span><div class="lbl">${w.l}</div><div class="ph">${w.p}</div>`;
+    card.onclick=()=>openWordModal(w,card);
+    grid.appendChild(card);
+  });
+}
+function openWordModal(w, card){
+  spokenWords.push(w.l);
+  updateSpokenBar();
+  card.classList.add('flash');
+  setTimeout(()=>card.classList.remove('flash'),500);
+  currentWord=w;
+
+  // Populate sheet
+  $('sheet-word').textContent=w.l;
+  $('sheet-ph').textContent=w.p;
+
+  const sign = w.mk && allSigns.find(s=>s.phrase===w.mk);
+  const wrap=$('sheet-img-wrap');
+  wrap.innerHTML='';
+  if(sign){
+    const img=document.createElement('img');
+    img.src=sign.imageUrl;
+    img.alt='Makaton sign for '+w.l;
+    wrap.appendChild(img);
+    $('sheet-cat').textContent=sign.category||'Sign';
+    $('sheet-hint').textContent='Show the sign as you say the word together';
+  } else {
+    const em=document.createElement('span');
+    em.className='sheet-emoji';
+    em.textContent=w.e;
+    wrap.appendChild(em);
+    $('sheet-cat').textContent='No sign photo yet';
+    $('sheet-hint').textContent='Point to the picture and say the word slowly together';
+  }
+
+  // Open sheet
+  $('sheet-backdrop').classList.add('open');
+  $('sign-sheet').classList.add('open');
+
+  // Speak immediately — small delay lets the sheet animate in first
+  setTimeout(()=>speak(w.l), 120);
+}
+function closeSheet(){
+  $('sheet-backdrop').classList.remove('open');
+  $('sign-sheet').classList.remove('open');
+}
+function replayWord(){
+  if(currentWord) speak(currentWord.l);
+}
+/* Voice — warm, slow, friendly. Picks the best available natural voice. */
+let warmVoice = null;
+function pickVoice(){
+  if(warmVoice) return;
+  const voices = synth.getVoices();
+  if(!voices.length) return;
+  // Priority list: natural/enhanced English voices that sound warm on iOS/Android/desktop
+  const preferred = [
+    'Samantha (Enhanced)','Samantha','Karen (Enhanced)','Karen',
+    'Moira','Tessa','Victoria','Serena (Enhanced)','Serena',
+    'Google UK English Female','Google US English',
+    'Microsoft Aria Online (Natural)','Microsoft Jenny Online (Natural)',
+    'Microsoft Zira','en-GB','en-AU'
+  ];
+  for(const name of preferred){
+    const v = voices.find(v=>v.name===name || v.name.includes(name) || v.lang===name);
+    if(v){ warmVoice=v; break; }
+  }
+  // Fallback: any en-GB or en-AU voice (tend to sound less robotic)
+  if(!warmVoice) warmVoice = voices.find(v=>v.lang==='en-GB'||v.lang==='en-AU');
+  // Final fallback: any English voice
+  if(!warmVoice) warmVoice = voices.find(v=>v.lang.startsWith('en'));
+}
+// Voices load async on some browsers
+if(synth.onvoiceschanged !== undefined) synth.onvoiceschanged = pickVoice;
+pickVoice();
+
+function speak(word){
+  if(!synth) return;
+  synth.cancel();
+  // Small delay so cancel clears properly on iOS
+  setTimeout(()=>{
+    pickVoice();
+    const u = new SpeechSynthesisUtterance(word);
+    if(warmVoice) u.voice = warmVoice;
+    u.lang   = warmVoice ? warmVoice.lang : 'en-GB';
+    u.rate   = 0.72;   // noticeably slower — gives processing time
+    u.pitch  = 1.25;   // warmer, slightly higher — more animated
+    u.volume = 1.0;
+    synth.speak(u);
+  }, 80);
+}
+function updateSpokenBar(){
+  const el=$('spoken-words');
+  if(spokenWords.length===0){el.textContent='Tap a card to hear the word';el.classList.remove('has');}
+  else{el.textContent=spokenWords.slice(-6).join(' · ');el.classList.add('has');}
+}
+function clearSpoken(){spokenWords=[];updateSpokenBar();if(synth)synth.cancel();}
+
+/* LOG */
+function buildLogChips(){
+  const quick=['Mama','Baba','No','Yes','More','Eat','Drink','Milk','Ball','Help','All done','Toilet','Wash hands','Well done','Please','Hello'];
+  const el=$('log-chips');
+  quick.forEach(w=>{
+    const c=document.createElement('div');
+    c.className='chip';c.textContent=w;
+    c.onclick=()=>c.classList.toggle('on');
+    el.appendChild(c);
+  });
+  $('log-custom').addEventListener('keydown',e=>{
+    if(e.key==='Enter'){
+      const v=e.target.value.trim();
+      if(!v)return;
+      const c=document.createElement('div');
+      c.className='chip on';c.textContent=v;
+      c.onclick=()=>c.classList.toggle('on');
+      el.appendChild(c);
+      e.target.value='';
+    }
+  });
+}
+function toggleChip(el,type){
+  if(type==='mode')el.classList.toggle('mode-on');
+  else el.classList.toggle('on');
+}
+function saveEntry(){
+  const words=[...$('log-chips').querySelectorAll('.chip.on')].map(c=>c.textContent);
+  const modes=[...document.querySelectorAll('.chip.mode-on')].map(c=>c.textContent);
+  const mood=$('log-mood').value;
+  const notes=$('log-notes').value.trim();
+  if(!words.length&&!notes)return;
+  const entry={
+    date:new Date().toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'}),
+    time:new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}),
+    words,modes,mood,notes
+  };
+  logEntries.unshift(entry);
+  try{localStorage.setItem('sc_log',JSON.stringify(logEntries));}catch(e){}
+  renderEntries();
+  $('log-chips').querySelectorAll('.chip.on').forEach(c=>c.classList.remove('on'));
+  document.querySelectorAll('.chip.mode-on').forEach(c=>c.classList.remove('mode-on'));
+  $('log-mood').value='';
+  $('log-notes').value='';
+}
+function renderEntries(){
+  const el=$('log-entries');
+  if(!logEntries.length){
+    el.innerHTML='<div class="empty"><div class="empty-icon">📓</div>No entries yet — log your first session above</div>';
+    return;
+  }
+  el.innerHTML=logEntries.map(e=>`
+    <div class="entry">
+      <div class="entry-hdr"><span class="entry-date">${e.date}</span><span class="entry-time">${e.time}${e.mood?' · '+e.mood:''}</span></div>
+      ${e.words&&e.words.length?`<div class="entry-words">${e.words.map(w=>`<span class="ew">${w}</span>`).join('')}</div>`:''}
+      ${e.modes&&e.modes.length?`<div class="entry-modes">${e.modes.map(m=>`<span class="em2">${m}</span>`).join('')}</div>`:''}
+      ${e.notes?`<div class="entry-notes">${e.notes}</div>`:''}
+    </div>`).join('');
+}
+
+/* DICTIONARY */
+async function loadSigns(){
+  try{
+    const r=await fetch('./mysigns.json?t='+Date.now());
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    allSigns=await r.json();
+    $('dict-loading').style.display='none';
+    buildDictCats();
+    renderDict(allSigns);
+    buildGrid(); // refresh board to show sign dots
+  }catch(err){
+    $('dict-loading').innerHTML='<span style="color:var(--danger)">Could not load mysigns.json — make sure it is in the same folder as this file.</span>';
+  }
+}
+function buildDictCats(){
+  const cats=['All',...new Set(allSigns.map(s=>s.category||'Uncategorized').sort())];
+  const bar=$('dict-cat-bar');
+  bar.innerHTML='';
+  cats.forEach(c=>{
+    const b=document.createElement('button');
+    b.className='dict-cat-btn'+(c==='All'?' active':'');
+    b.textContent=c;
+    b.onclick=()=>{dictCatFilter=c;filterDict();document.querySelectorAll('.dict-cat-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');};
+    bar.appendChild(b);
+  });
+}
+function filterDict(){
+  const q=$('dict-search').value.toLowerCase().trim();
+  const filtered=allSigns.filter(s=>{
+    const inCat=dictCatFilter==='All'||(s.category||'Uncategorized')===dictCatFilter;
+    const inQ=!q||s.phrase.toLowerCase().includes(q)||(s.category||'').toLowerCase().includes(q);
+    return inCat&&inQ;
+  });
+  renderDict(filtered);
+}
+function renderDict(signs){
+  const grid=$('dict-grid');
+  if(!signs.length){grid.innerHTML='<p style="color:var(--text3);font-size:13px">No signs found.</p>';return;}
+  const sorted=[...signs].sort((a,b)=>a.phrase.localeCompare(b.phrase));
+  grid.innerHTML=sorted.map(s=>`
+    <div class="dict-card" onclick="dictOpenModal('${s.phrase.replace(/'/g,"\\'")}')">
+      <img src="${s.imageUrl}" alt="Makaton sign for ${s.phrase}" loading="lazy" onerror="this.style.display='none'">
+      <div class="dict-card-info">
+        <div class="dict-card-cat">${s.category||'Uncategorized'}</div>
+        <div class="dict-card-phrase">${s.phrase}</div>
+      </div>
+    </div>`).join('');
+}
+function dictOpenModal(phrase){
+  const s=allSigns.find(x=>x.phrase===phrase);
+  if(!s)return;
+  currentWord={l:phrase,p:'',e:'🤟',mk:phrase};
+  $('sheet-word').textContent=phrase;
+  $('sheet-ph').textContent='';
+  $('sheet-cat').textContent=s.category||'';
+  $('sheet-hint').textContent='Show the sign as you say the word together';
+  const wrap=$('sheet-img-wrap');
+  wrap.innerHTML='';
+  const img=document.createElement('img');
+  img.src=s.imageUrl;
+  img.alt='Makaton sign for '+phrase;
+  wrap.appendChild(img);
+  $('sheet-backdrop').classList.add('open');
+  $('sign-sheet').classList.add('open');
+  setTimeout(()=>speak(phrase),120);
+}
+$('dict-search').addEventListener('input',filterDict);
+
+/* INIT */
+buildCats();
+buildGrid();
+buildLogChips();
+renderEntries();
+</script>
+</body>
+</html>
